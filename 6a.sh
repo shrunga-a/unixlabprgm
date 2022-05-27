@@ -1,25 +1,37 @@
-#6a. Write s a shell script to find a file/s that matches a pattern given as command line argument
-#in the home directory, display the contents of the file and copy the file into the directory
-#~/mydir.
 
-if [ $# -eq 1 ]
+#6a. Write s a shell script to find a file/s that matches a pattern given as command line argumentthe home directory, display the contents of the file and copy the file into the directory
+#~/mydir.
+#comment
+
+
+if [ $# -ge 1 ]
 then
-if [ -d ~/mydir ]
-then
-set -- `find ~ -name "$1"`
-for i in $*
-do
-cp $i ~/mydir 2>er
-done
-if [ $# -eq 0 ]
-then
-echo "No such file"
+	if [ ! -e ~/mydir ]
+	then
+		mkdir ~/mydir
+	fi	
+	for k in $*
+	do	
+			if [ -f $k ]
+			then
+				find $HOME -name "$k">files
+				while read line
+				do
+			
+					num=`echo $line | grep -o "/" | wc -l`
+					num=`expr $num + 1`
+					file=`echo $line | cut -d "/" -f $num`
+					cat $line
+					echo "--------------------------------------------------------------"
+					if [ `ls ~/mydir | grep $file | wc -l` -eq 0 ]
+					then
+						cp $line ~/mydir 
+					fi
+				done<files
+			else
+				echo "File doesn't exists"
+			fi
+	done
 else
-cat $i
-fi
-else
-echo "No such directory"
-fi
-else
-echo enter argument
+	echo "Give arguments"
 fi
