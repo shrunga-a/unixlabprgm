@@ -1,31 +1,30 @@
-#7b. Write a shell script that accepts a list of filenames as its argument, count and report
-#occurrence of each word that is present in the first argument file on other argument files.
-if [ $# -ne 0 ]
-then
-if [ $# -ge 2 ]
-then
-if [ -f $1 ]
-then
+7b. Write a shell script that accepts a list of filenames as its argument, count and report
+occurrence of each word that is present in the first argument file on other argument files.
 
- 
-for fn in $*
-do
-if [ $fn = $1 ]
+if [ $# -ge 2 ] 
+then 
+if [ -f $1 ]
+then 
+for i in $*
+do 
+if [ $i != $1 ]
 then
-continue
-fi
-for w in `cat $1`
-do
-l=`grep -iow "$w" $fn | wc -l`
-echo $w is $l times in $fn
+	if [ -f $i ]
+	then
+		for j in `cat $1`
+		do
+			count=`grep -owi $j $i | wc -l`  
+			echo "Number of $j in $i is: $count"
+		done
+		echo "-------------------------------"
+	else
+		echo "$i doesn't exist"
+	fi
+fi 
 done
-done
 else
-echo Enter pattern file
+echo "Enter patter file"
 fi
 else
-echo Enter files to match 
-fi
-else
-echo Enter pattern file and files to be match 
+echo "Give three parameters, 1.pattern 2.filename\n format: sh.filename.sh pattern file(s)"
 fi
